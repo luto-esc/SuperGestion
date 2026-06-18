@@ -1,6 +1,30 @@
 #importamos la libreria 'os' para limpiar la pantalla de la consola
 import os
 
+def StraInt(caracter):
+	if caracter == '1':
+		caracter = 1
+	elif caracter == '2':
+		caracter = 2
+	elif caracter == '3':
+		caracter = 3
+	elif caracter == '4':
+		caracter = 4
+	elif caracter == '5':
+		caracter = 5
+	elif caracter == '6':
+		caracter = 6
+	elif caracter == '7':
+		caracter = 7
+	elif caracter == '8':
+		caracter = 8
+	elif caracter == '9':
+		caracter = 9
+	elif caracter == '0':
+		caracter == 0
+
+	return caracter
+
 #limpia la consola dependiendo si el os es windows o linux/mac
 def LimpiarConsola():
 	#si el usuario tiene windows (os.name = nt),entonces ejecutamos el comando 'cls' 
@@ -27,18 +51,27 @@ def MostrarMenuPrincipal():
 def PedirleOpcionUsuario(opcion):
 	#pide un valor, lo transfroma en entero
 	opcion = input('Ingrese una opcion: ')
+	
 	#retorna ese valor
 	return opcion
 
 def ValidadorOpcion(opcion):
 	bandera = True
-	opciones = (1,2,3,4,5,6,7,8,9,0)
-	if opcion in opciones:
-		return opcion
+	opcionesInt = (1,2,3,4,5,6,7,8,9,0)
+	opcionesStr = ('1','2','3','4','5','6','7','8','9','0')
+	if opcion in opcionesStr:
+		opcion = StraInt(opcion)
+		if opcion in opcionesInt:
+			bandera = True
 	else:
 		bandera = False
 
 	while bandera == False:
 		opcion = input('Ingresa una opcion valida: ')
-		if opcion in opciones:
-			bandera = True
+		if opcion in opcionesStr:
+			opcion = StraInt(opcion)
+			if opcion in opcionesInt:
+				bandera = True
+
+	if bandera == True:
+		return opcion
