@@ -26,6 +26,19 @@ def MostrarMenuPrincipal():
 #funcion que le pide al usuaraio una opcion y retorna un entero, lo que el usuario ingreso
 def PedirleOpcionUsuario(opcion):
 	#pide un valor, lo transfroma en entero
-	opcion = int(input('Ingrese una opcion: '))
+	opcion = input('Ingrese una opcion: ')
 	#retorna ese valor
 	return opcion
+
+def ValidadorOpcion(opcion):
+	bandera = True
+	opciones = (1,2,3,4,5,6,7,8,9,0)
+	if opcion in opciones:
+		return opcion
+	else:
+		bandera = False
+
+	while bandera == False:
+		opcion = input('Ingresa una opcion valida: ')
+		if opcion in opciones:
+			bandera = True

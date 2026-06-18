@@ -1,8 +1,16 @@
 #de funciones.py importamos las funciones a utilizar
-from funciones import LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario
+from funciones import LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario, ValidadorOpcion
+
 
 #limpiamos la consola antes de iniciar el programa
 LimpiarConsola()
+
+#asignamos una variable para el archivo, este estara en modo READ
+#archivoR = open('archivo.txt', 'r')
+
+#contenido = archivoR.readlines()
+
+#print(contenido)
 
 #titulo del programa
 print('BIENVENIDO A GESTIONSUPER')
@@ -19,6 +27,8 @@ MostrarMenuPrincipal()
 while opcion != 0:
 	#a la variable opcion le asignamos la funcion
 	opcion = PedirleOpcionUsuario(opcion)
+
+	opcion = ValidadorOpcion(opcion)
 
 	#si la opcion que recibe es 1
 	if opcion == 1:
