@@ -35,11 +35,15 @@ while opcion != 0:
 			#asignamos una variable para el archivo, este estara en modo READ
 			with open('archivo.txt', 'a') as archivo:
 				#agregar contendio al archivo
-				archivo = archivo.write('\n',producto.nombre)
-				archivo = archivo.write('\n',producto.precio)
-				archivo = archivo.write('\n',producto.stock)
-				archivo = archivo.write('\n',producto.codprod)
-				archivo = archivo.write('\n','///')
+				archivo.write('\n///')
+				archivo.write(producto.nombre)
+				archivo.write('\n')
+				archivo.write(producto.precio)
+				archivo.write('\n')
+				archivo.write(producto.stock)
+				archivo.write('\n')
+				archivo.write(producto.codprod)
+				archivo.write('\n///')
 			finaliar = PedirleOpcionUsuario(finalizar)
 			finalizar = ValidadorOpcion(finalizar)
 
