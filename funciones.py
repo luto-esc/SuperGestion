@@ -21,7 +21,7 @@ def StraInt(caracter):
 	elif caracter == '9':
 		caracter = 9
 	elif caracter == '0':
-		caracter == 0
+		caracter = 0
 
 	return caracter
 
@@ -56,18 +56,23 @@ def PedirleOpcionUsuario(opcion):
 	return opcion
 
 def ValidadorOpcion(opcion):
-	bandera = True
 	opcionesInt = (1,2,3,4,5,6,7,8,9,0)
 	opcionesStr = ('1','2','3','4','5','6','7','8','9','0')
+	
+	#si opcion en opcionesStr
 	if opcion in opcionesStr:
 		opcion = StraInt(opcion)
 		if opcion in opcionesInt:
 			bandera = True
+	#sino
 	else:
 		bandera = False
 
+	#mientras bandera = F hacer
 	while bandera == False:
+		#esc('ingrese una opcion valida: ') leer(opcion)
 		opcion = input('Ingresa una opcion valida: ')
+		#si opcion en opcinesStr
 		if opcion in opcionesStr:
 			opcion = StraInt(opcion)
 			if opcion in opcionesInt:

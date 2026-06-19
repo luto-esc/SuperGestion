@@ -1,16 +1,9 @@
 #de funciones.py importamos las funciones a utilizar
 from funciones import LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario, ValidadorOpcion
-
+from registros import Producto
 
 #limpiamos la consola antes de iniciar el programa
 LimpiarConsola()
-
-#asignamos una variable para el archivo, este estara en modo READ
-#archivoR = open('archivo.txt', 'r')
-
-#contenido = archivoR.readlines()
-
-#print(contenido)
 
 #titulo del programa
 print('BIENVENIDO A GESTIONSUPER')
@@ -32,7 +25,27 @@ while opcion != 0:
 
 	#si la opcion que recibe es 1
 	if opcion == 1:
-		print('aca cargariamos un producto')
+		finalizar = 1
+		while finalizar == 1:
+			nombre = input('Ingrese el nombre del producto: ')
+			precio = float(input('ingrese el precio del producto: '))
+			stock = int(input('ingrese el nro de stock del producto: '))
+			codprod = int(input('ingrese el codigo del producto: '))
+			producto = Producto(nombre, precio, stock, codprod)
+			#asignamos una variable para el archivo, este estara en modo READ
+			with open('archivo.txt', 'a') as archivo:
+				#agregar contendio al archivo
+				archivo = archivo.write('\n',producto.nombre)
+				archivo = archivo.write('\n',producto.precio)
+				archivo = archivo.write('\n',producto.stock)
+				archivo = archivo.write('\n',producto.codprod)
+				archivo = archivo.write('\n','///')
+			finaliar = PedirleOpcionUsuario(finalizar)
+			finalizar = ValidadorOpcion(finalizar)
+
+		with open('archivo.txt', 'r') as archivo:
+			contenido = archivo.read()
+			print(contenido)
 	elif opcion == 2:
 		print('aca buscariamos un producto')
 	elif opcion == 3:
