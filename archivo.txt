@@ -7,5 +7,4 @@ Sprite
 1800.00
 11
 0010
-
-papas pay
+///

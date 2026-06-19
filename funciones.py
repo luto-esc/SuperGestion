@@ -1,6 +1,15 @@
 #importamos la libreria 'os' para limpiar la pantalla de la consola
 import os
 
+def FloaStr(numero):
+	lista_digitos = list(str(numero))
+	numerostr = ''
+	for i in lista_digitos:
+		numerostr = numerostr + i
+
+	return numerostr
+
+
 def StraInt(caracter):
 	if caracter == '1':
 		caracter = 1
@@ -24,6 +33,11 @@ def StraInt(caracter):
 		caracter = 0
 
 	return caracter
+
+#def StraFlo(caracter):
+#	lista_digitos = list(int(caracter))
+#	cont = 0
+
 
 #limpia la consola dependiendo si el os es windows o linux/mac
 def LimpiarConsola():

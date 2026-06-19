@@ -36,6 +36,7 @@ while opcion != 0:
 			with open('archivo.txt', 'a') as archivo:
 				#agregar contendio al archivo
 				archivo.write('\n///')
+				archivo.write('\n')
 				archivo.write(producto.nombre)
 				archivo.write('\n')
 				archivo.write(producto.precio)
