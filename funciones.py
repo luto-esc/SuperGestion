@@ -1,14 +1,6 @@
 #importamos la libreria 'os' para limpiar la pantalla de la consola
 import os
-
-def FloaStr(numero):
-	lista_digitos = list(str(numero))
-	numerostr = ''
-	for i in lista_digitos:
-		numerostr = numerostr + i
-
-	return numerostr
-
+from registros import Producto
 
 def StraInt(caracter):
 	if caracter == '1':
@@ -21,72 +13,45 @@ def StraInt(caracter):
 		caracter = 4
 	elif caracter == '5':
 		caracter = 5
-	elif caracter == '6':
-		caracter = 6
-	elif caracter == '7':
-		caracter = 7
-	elif caracter == '8':
-		caracter = 8
-	elif caracter == '9':
-		caracter = 9
 	elif caracter == '0':
 		caracter = 0
-
 	return caracter
-
-#def StraFlo(caracter):
-#	lista_digitos = list(int(caracter))
-#	cont = 0
-
 
 #limpia la consola dependiendo si el os es windows o linux/mac
 def LimpiarConsola():
-	#si el usuario tiene windows (os.name = nt),entonces ejecutamos el comando 'cls' 
 	if os.name == "nt":
 		os.system("cls")
-	#sino en cualquier otro caso ejecutamos el comando 'clear'
 	else:
 		os.system("clear")
 
 def MostrarMenuPrincipal():
-	#lista en la que guardamos un conjunto de caracteres
 	menuprincial = (
 		'1) Cargar producto',
 		'2) Buscar producto',
-		'3) Promociones activas',
+		'3) Calcular total de venta',
 		'4) Productos mas vendidos',
 		'5) Estadisticas de ventas',
 		'0) Salir')
-	#para cada i en la lista, lo imprime o escribe por pantalla
 	for i in menuprincial:
 		print(i)
 
-#funcion que le pide al usuaraio una opcion y retorna un entero, lo que el usuario ingreso
 def PedirleOpcionUsuario(opcion):
-	#pide un valor, lo transfroma en entero
 	opcion = input('Ingrese una opcion: ')
-	
-	#retorna ese valor
 	return opcion
 
 def ValidadorOpcion(opcion):
-	opcionesInt = (1,2,3,4,5,6,7,8,9,0)
-	opcionesStr = ('1','2','3','4','5','6','7','8','9','0')
-	
-	#si opcion en opcionesStr
+	opcionesInt = (1,2,3,4,5,0)
+	opcionesStr = ('1','2','3','4','5','0')
+
 	if opcion in opcionesStr:
 		opcion = StraInt(opcion)
 		if opcion in opcionesInt:
 			bandera = True
-	#sino
 	else:
 		bandera = False
 
-	#mientras bandera = F hacer
 	while bandera == False:
-		#esc('ingrese una opcion valida: ') leer(opcion)
 		opcion = input('Ingresa una opcion valida: ')
-		#si opcion en opcinesStr
 		if opcion in opcionesStr:
 			opcion = StraInt(opcion)
 			if opcion in opcionesInt:
@@ -94,3 +59,65 @@ def ValidadorOpcion(opcion):
 
 	if bandera == True:
 		return opcion
+
+
+#--- FIX: validacion de datos numericos para que no se rompa el programa ---
+def PedirFloat(mensaje):
+	valido = False
+	while valido == False:
+		try:
+			valor = float(input(mensaje))
+			valido = True
+		except ValueError:
+			print('Error: debe ingresar un valor numerico. Intente nuevamente.')
+	return valor
+
+def PedirInt(mensaje):
+	valido = False
+	while valido == False:
+		try:
+			valor = int(input(mensaje))
+			valido = True
+		except ValueError:
+			print('Error: debe ingresar un numero entero. Intente nuevamente.')
+	return valor
+
+
+#--- productos ---
+def CargarProducto():
+	nombre = input('Ingrese el nombre del producto: ')
+	while nombre.strip() == '':
+		nombre = input('El nombre no puede estar vacio. Ingrese el nombre del producto: ')
+
+	precio = PedirFloat('Ingrese el precio del producto: ')
+	stock = PedirInt('Ingrese el nro de stock del producto: ')
+	codprod = PedirInt('Ingrese el codigo del producto: ')
+
+	producto = Producto(nombre, precio, stock, codprod)
+	return producto
+
+#FIX: convertir todo a str antes de escribir (antes tiraba TypeError)
+def GuardarProducto(producto, archivo='archivo.txt'):
+	with open(archivo, 'a') as f:
+		f.write('///\n')
+		f.write(producto.nombre + '\n')
+		f.write(str(producto.precio) + '\n')
+		f.write(str(producto.stock) + '\n')
+		f.write(str(producto.codprod) + '\n')
+		f.write('///\n')
+
+def BuscarProductoPorCodigo(codigo, archivo='archivo.txt'):
+	try:
+		with open(archivo, 'r') as f:
+			contenido = f.read()
+	except FileNotFoundError:
+		return None
+
+	bloques = contenido.split('///')
+	for bloque in bloques:
+		lineas = [linea for linea in bloque.split('\n') if linea.strip() != '']
+		if len(lineas) == 4:
+			nombre, precio, stock, codprod = lineas
+			if int(codprod) == codigo:
+				return Producto(nombre, float(precio), int(stock), int(codprod))
+	return None

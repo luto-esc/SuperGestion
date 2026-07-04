@@ -1,67 +1,55 @@
 #de funciones.py importamos las funciones a utilizar
-from funciones import LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario, ValidadorOpcion
-from registros import Producto
+from funciones import (LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario,
+	ValidadorOpcion, CargarProducto, GuardarProducto, BuscarProductoPorCodigo, PedirInt)
 
-#limpiamos la consola antes de iniciar el programa
 LimpiarConsola()
-
-#titulo del programa
 print('BIENVENIDO A GESTIONSUPER')
 
-#establecemos la variable para el mientras que controla, que opcion tomara el usuario
-#de este modo utilizaremos una estrucutra post-test, ya que la opcion nunca sera 0 en un inicio
-#por lo tanto siempre se mostrara al menos una vez
 opcion = 9
-
-#la fucion muestra por pantalla las opciones
 MostrarMenuPrincipal()
 
-#Mientras opcion sea distinto de 0
 while opcion != 0:
-	#a la variable opcion le asignamos la funcion
 	opcion = PedirleOpcionUsuario(opcion)
-
 	opcion = ValidadorOpcion(opcion)
 
-	#si la opcion que recibe es 1
+	#si la opcion que recibe es 1: cargar producto
 	if opcion == 1:
+		#FIX: "finaliar" -> "finalizar", antes rompia el control del bucle
 		finalizar = 1
 		while finalizar == 1:
-			nombre = input('Ingrese el nombre del producto: ')
-			precio = float(input('ingrese el precio del producto: '))
-			stock = int(input('ingrese el nro de stock del producto: '))
-			codprod = int(input('ingrese el codigo del producto: '))
-			producto = Producto(nombre, precio, stock, codprod)
-			#asignamos una variable para el archivo, este estara en modo READ
-			with open('archivo.txt', 'a') as archivo:
-				#agregar contendio al archivo
-				archivo.write('\n///')
-				archivo.write('\n')
-				archivo.write(producto.nombre)
-				archivo.write('\n')
-				archivo.write(producto.precio)
-				archivo.write('\n')
-				archivo.write(producto.stock)
-				archivo.write('\n')
-				archivo.write(producto.codprod)
-				archivo.write('\n///')
-			finaliar = PedirleOpcionUsuario(finalizar)
+			producto = CargarProducto()
+			GuardarProducto(producto)
+			print('Producto guardado correctamente.')
+
+			print('\n¿Desea cargar otro producto?')
+			print('1) Si')
+			print('0) No')
+			finalizar = PedirleOpcionUsuario(finalizar)
 			finalizar = ValidadorOpcion(finalizar)
 
-		with open('archivo.txt', 'r') as archivo:
-			contenido = archivo.read()
-			print(contenido)
 	elif opcion == 2:
-		print('aca buscariamos un producto')
-	elif opcion == 3:
-		print('aca veriamos promociones activas')
-	elif opcion == 4:
-		print('aca veriamos productos mas vendidos')
-	elif opcion == 5:
-		print('aca veriamos las estadisticas de ventas')
+		codprod = PedirInt('Ingrese el codigo del producto a buscar: ')
+		producto = BuscarProductoPorCodigo(codprod)
+		if producto is None:
+			print('No existe un producto con ese codigo.')
+		else:
+			print('Nombre: ' + producto.nombre)
+			print('Precio: $' + str(producto.precio))
+			print('Stock: ' + str(producto.stock))
+			print('Codigo: ' + str(producto.codprod))
 
+	elif opcion == 3:
+		print('Pendiente: calculo de total de venta')
+
+	elif opcion == 4:
+		print('Pendiente: productos mas vendidos')
+
+	elif opcion == 5:
+		print('Pendiente: estadisticas de ventas')
+
+	if opcion != 0:
+		print('\n')
+		MostrarMenuPrincipal()
 
 LimpiarConsola()
-
-#mensaje final una vez salido del bucle
 print('Gracias por elegir att:GESTIONSUPER!')
