@@ -15,3 +15,12 @@ class Producto:
 	stock: int
 	#codprod = entero
 	codprod: int
+
+
+#Descuento = Registro
+@dataclass
+class Descuento:
+	#coddesc = entero (codigo del descuento)
+	coddesc: int
+	#valor = real (porcentaje a descontar, ej: 10 = 10%)
+	valor: float

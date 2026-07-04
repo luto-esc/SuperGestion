@@ -1,6 +1,6 @@
 #importamos la libreria 'os' para limpiar la pantalla de la consola
 import os
-from registros import Producto
+from registros import Producto, Descuento
 
 def StraInt(caracter):
 	if caracter == '1':
@@ -13,6 +13,8 @@ def StraInt(caracter):
 		caracter = 4
 	elif caracter == '5':
 		caracter = 5
+	elif caracter == '6':
+		caracter = 6
 	elif caracter == '0':
 		caracter = 0
 	return caracter
@@ -27,10 +29,11 @@ def LimpiarConsola():
 def MostrarMenuPrincipal():
 	menuprincial = (
 		'1) Cargar producto',
-		'2) Buscar producto',
-		'3) Calcular total de venta',
-		'4) Productos mas vendidos',
-		'5) Estadisticas de ventas',
+		'2) Cargar descuento',
+		'3) Buscar producto',
+		'4) Calcular total de venta',
+		'5) Productos mas vendidos',
+		'6) Estadisticas de ventas',
 		'0) Salir')
 	for i in menuprincial:
 		print(i)
@@ -40,8 +43,8 @@ def PedirleOpcionUsuario(opcion):
 	return opcion
 
 def ValidadorOpcion(opcion):
-	opcionesInt = (1,2,3,4,5,0)
-	opcionesStr = ('1','2','3','4','5','0')
+	opcionesInt = (1,2,3,4,5,6,0)
+	opcionesStr = ('1','2','3','4','5','6','0')
 
 	if opcion in opcionesStr:
 		opcion = StraInt(opcion)
@@ -121,3 +124,66 @@ def BuscarProductoPorCodigo(codigo, archivo='archivo.txt'):
 			if int(codprod) == codigo:
 				return Producto(nombre, float(precio), int(stock), int(codprod))
 	return None
+
+
+#--- descuentos ---
+def CargarDescuento():
+	coddesc = PedirInt('Ingrese el codigo del descuento: ')
+	valor = PedirFloat('Ingrese el porcentaje del descuento (ej: 10 = 10%): ')
+	descuento = Descuento(coddesc, valor)
+	return descuento
+
+def GuardarDescuento(descuento, archivo='descuentos.txt'):
+	with open(archivo, 'a') as f:
+		f.write('///\n')
+		f.write(str(descuento.coddesc) + '\n')
+		f.write(str(descuento.valor) + '\n')
+		f.write('///\n')
+
+def BuscarDescuentoPorCodigo(codigo, archivo='descuentos.txt'):
+	try:
+		with open(archivo, 'r') as f:
+			contenido = f.read()
+	except FileNotFoundError:
+		return None
+
+	bloques = contenido.split('///')
+	for bloque in bloques:
+		lineas = [linea for linea in bloque.split('\n') if linea.strip() != '']
+		if len(lineas) == 2:
+			coddesc, valor = lineas
+			if int(coddesc) == codigo:
+				return Descuento(int(coddesc), float(valor))
+	return None
+
+
+#--- calculo de total de venta (1 producto) ---
+def CalcularTotal():
+	codprod = PedirInt('Ingrese el codigo del producto: ')
+	producto = BuscarProductoPorCodigo(codprod)
+
+	if producto is None:
+		print('No existe un producto con ese codigo.')
+		return
+
+	print('Producto encontrado: ' + producto.nombre + ' - $' + str(producto.precio))
+
+	cantidad = PedirInt('Ingrese la cantidad: ')
+	if cantidad > producto.stock:
+		print('No hay stock suficiente. Stock disponible: ' + str(producto.stock))
+		return
+
+	total = producto.precio * cantidad
+	print('Subtotal: $' + str(total))
+
+	aplicar = input('¿Desea aplicar un descuento? (s/n): ')
+	if aplicar.lower() == 's':
+		coddesc = PedirInt('Ingrese el codigo del descuento: ')
+		descuento = BuscarDescuentoPorCodigo(coddesc)
+		if descuento is None:
+			print('No existe un descuento con ese codigo. No se aplicara descuento.')
+		else:
+			total = total - (total * descuento.valor / 100)
+			print('Descuento aplicado: ' + str(descuento.valor) + '%')
+
+	print('TOTAL A PAGAR: $' + str(round(total, 2)))

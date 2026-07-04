@@ -1,0 +1,13 @@
+Nuevos cambios: agrega descuentos y una prueba de calculo de total para un producto
+
+- registros.py: se agrega la clase Descuento(coddesc, valor)
+- funciones.py: CargarDescuento, GuardarDescuento y
+  BuscarDescuentoPorCodigo, con el mismo esquema de archivo separado
+  por "///" que ya se usaba para productos (descuentos.txt)
+- funciones.py: CalcularTotal() -> busca el producto por codigo,
+  calcula el subtotal, pregunta si se aplica un descuento (buscandolo
+  tambien por codigo) y muestra el total final
+- main.py: se agregan al menu las opciones "Cargar descuento" y
+  "Calcular total de venta", ambas ya conectadas y funcionales
+- validador de opciones y menu actualizados para soportar 6 opciones
+
