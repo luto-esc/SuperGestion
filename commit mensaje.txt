@@ -1,13 +1,12 @@
-Nuevos cambios: agrega descuentos y una prueba de calculo de total para un producto
+Nuevos cambios: permite cargar varios productos en una misma venta
 
-- registros.py: se agrega la clase Descuento(coddesc, valor)
-- funciones.py: CargarDescuento, GuardarDescuento y
-  BuscarDescuentoPorCodigo, con el mismo esquema de archivo separado
-  por "///" que ya se usaba para productos (descuentos.txt)
-- funciones.py: CalcularTotal() -> busca el producto por codigo,
-  calcula el subtotal, pregunta si se aplica un descuento (buscandolo
-  tambien por codigo) y muestra el total final
-- main.py: se agregan al menu las opciones "Cargar descuento" y
-  "Calcular total de venta", ambas ya conectadas y funcionales
-- validador de opciones y menu actualizados para soportar 6 opciones
+- funciones.py: CalcularTotal() ahora es un bucle que permite agregar
+  N productos a la venta (validando codigo y stock en cada uno).
+  El descuento se pregunta una sola vez, al final, sobre el total
+  acumulado de todos los productos
+- funciones.py: se agrega GuardarRegistroVenta(), que persiste cada
+  producto vendido (codigo, nombre, cantidad, monto ya con el
+  descuento aplicado) en ventas.txt -> esto deja la base lista para
+  las estadisticas del proximo commit
+- main.py: sin cambios (opcion 4 sigue apuntando a CalcularTotal)
 

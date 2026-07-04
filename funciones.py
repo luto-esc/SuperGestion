@@ -157,25 +157,39 @@ def BuscarDescuentoPorCodigo(codigo, archivo='descuentos.txt'):
 	return None
 
 
-#--- calculo de total de venta (1 producto) ---
+#--- calculo de total de venta (varios productos) ---
 def CalcularTotal():
-	codprod = PedirInt('Ingrese el codigo del producto: ')
-	producto = BuscarProductoPorCodigo(codprod)
+	items = []   #cada item: [codprod, nombre, cantidad, subtotal]
+	continuar = 's'
 
-	if producto is None:
-		print('No existe un producto con ese codigo.')
+	while continuar.lower() == 's':
+		codprod = PedirInt('Ingrese el codigo del producto: ')
+		producto = BuscarProductoPorCodigo(codprod)
+
+		if producto is None:
+			print('No existe un producto con ese codigo.')
+		else:
+			cantidad = PedirInt('Ingrese la cantidad: ')
+			if cantidad > producto.stock:
+				print('No hay stock suficiente. Stock disponible: ' + str(producto.stock))
+			else:
+				subtotal = producto.precio * cantidad
+				items.append([producto.codprod, producto.nombre, cantidad, subtotal])
+				print(producto.nombre + ' x' + str(cantidad) + ' -> $' + str(subtotal))
+
+		continuar = input('¿Desea agregar otro producto? (s/n): ')
+
+	if len(items) == 0:
+		print('No se cargo ningun producto en la venta.')
 		return
 
-	print('Producto encontrado: ' + producto.nombre + ' - $' + str(producto.precio))
+	total = 0
+	for item in items:
+		total = total + item[3]
 
-	cantidad = PedirInt('Ingrese la cantidad: ')
-	if cantidad > producto.stock:
-		print('No hay stock suficiente. Stock disponible: ' + str(producto.stock))
-		return
+	print('\nSubtotal de la venta: $' + str(total))
 
-	total = producto.precio * cantidad
-	print('Subtotal: $' + str(total))
-
+	descuento_frac = 0
 	aplicar = input('¿Desea aplicar un descuento? (s/n): ')
 	if aplicar.lower() == 's':
 		coddesc = PedirInt('Ingrese el codigo del descuento: ')
@@ -183,7 +197,25 @@ def CalcularTotal():
 		if descuento is None:
 			print('No existe un descuento con ese codigo. No se aplicara descuento.')
 		else:
-			total = total - (total * descuento.valor / 100)
+			descuento_frac = descuento.valor / 100
 			print('Descuento aplicado: ' + str(descuento.valor) + '%')
 
-	print('TOTAL A PAGAR: $' + str(round(total, 2)))
+	total_final = total * (1 - descuento_frac)
+	print('TOTAL A PAGAR: $' + str(round(total_final, 2)))
+
+	#registramos cada producto vendido, con el % de descuento ya aplicado
+	for item in items:
+		codprod, nombre, cantidad, subtotal = item
+		monto_final = subtotal * (1 - descuento_frac)
+		GuardarRegistroVenta(codprod, nombre, cantidad, monto_final)
+
+
+#--- registro de ventas (para futuras estadisticas) ---
+def GuardarRegistroVenta(codprod, nombre, cantidad, monto, archivo='ventas.txt'):
+	with open(archivo, 'a') as f:
+		f.write('///\n')
+		f.write(str(codprod) + '\n')
+		f.write(nombre + '\n')
+		f.write(str(cantidad) + '\n')
+		f.write(str(monto) + '\n')
+		f.write('///\n')
