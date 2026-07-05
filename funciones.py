@@ -2,6 +2,31 @@
 import os
 from registros import Producto, Descuento
 
+def mostrarlogin(estado):
+	
+	with open('usuarios.txt', 'r') as f:
+		contenido = f.read().splitlines()
+
+		usuario = str(input('Ingrese el usuario: '))
+		contraseña = str(input('Ingrese la contraseña: '))
+
+		for us in contenido:
+			if us == 'admin':
+				for con in contenido:
+					if con == 'admin123':
+						return 'a'
+					else:
+						print('contraseña incorrecta')
+			elif us == 'operador':
+				for con in contenido:
+					if con == 'operador123':
+						return 'o'
+					else:
+						print('contraseña incorrecta')
+
+
+
+
 def StraInt(caracter):
 	if caracter == '1':
 		caracter = 1
