@@ -40,6 +40,8 @@ def StraInt(caracter):
 		caracter = 5
 	elif caracter == '6':
 		caracter = 6
+	elif caracter == '7'
+	    caracter = 7
 	elif caracter == '0':
 		caracter = 0
 	return caracter
