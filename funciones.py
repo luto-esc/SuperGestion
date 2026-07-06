@@ -59,6 +59,7 @@ def MostrarMenuPrincipal():
 		'4) Calcular total de venta',
 		'5) Productos mas vendidos',
 		'6) Estadisticas de ventas',
+		'7) Promocion maorista y minorista',
 		'0) Salir')
 	for i in menuprincial:
 		print(i)
@@ -68,8 +69,8 @@ def PedirleOpcionUsuario(opcion):
 	return opcion
 
 def ValidadorOpcion(opcion):
-	opcionesInt = (1,2,3,4,5,6,0)
-	opcionesStr = ('1','2','3','4','5','6','0')
+	opcionesInt = (1,2,3,4,5,6,7,0)
+	opcionesStr = ('1','2','3','4','5','6','7','0')
 
 	if opcion in opcionesStr:
 		opcion = StraInt(opcion)
@@ -244,3 +245,74 @@ def GuardarRegistroVenta(codprod, nombre, cantidad, monto, archivo='ventas.txt')
 		f.write(str(cantidad) + '\n')
 		f.write(str(monto) + '\n')
 		f.write('///\n')
+
+# promociones mayorista y minorista 
+def CalcularPromociones():
+	items = []   # [cada item: codprod, nombre, cantidad, subtotal, descuento aplicado]
+	continuar = 's'
+
+	while continuar.lower() == 's':
+		codprod = PedirInt('Ingrese el codigo del producto: ')
+		producto = BuscarProductoPorCodigo(codprod)
+
+		if producto is None:
+			print('No existe un producto con ese codigo.')
+		else:
+			cantidad = PedirInt('Ingrese la cantidad: ')
+			if cantidad > producto.stock:
+				print('No hay stock suficiente. Stock disponible: ' + str(producto.stock))
+			else:
+				print('\nSeleccione el tipo de promocion a aplicar para este producto:')
+				print('1) Minorista (2x1 o 3x2)')
+				print('2) Mayorista (43% desc. llevando 4 o mas unidades)')
+				print('0) Ninguna promocion')
+				
+				tipo_promo = input('Ingrese una opcion: ')
+				
+				subtotal_original = producto.precio * cantidad
+				descuento_promo = 0
+
+				if tipo_promo == '1':
+					print('1) Aplicar 2x1')
+					print('2) Aplicar 3x2')
+					opc_min = input('Ingrese opcion: ')
+					if opc_min == '1':
+						# 2x1 Se descuenta 1 por cada 2
+						unidades_gratis = cantidad // 2
+						descuento_promo = unidades_gratis * producto.precio
+						print('Promo 2x1 aplicada.')
+					elif opc_min == '2':
+						# 3x2 Se descuenta 1 por cada 3
+						unidades_gratis = cantidad // 3
+						descuento_promo = unidades_gratis * producto.precio
+						print('Promo 3x2 aplicada.')
+				
+				elif tipo_promo == '2':
+					if cantidad >= 4:
+						# 43% de descuento por unidad
+						descuento_promo = subtotal_original * 0.43
+						print('Promo Mayorista aplicada (43% de descuento).')
+					else:
+						print('No cumple con el requisito de 4 unidades para la promo mayorista. Se cobra precio regular.')
+
+				subtotal_final = subtotal_original - descuento_promo
+				items.append([producto.codprod, producto.nombre, cantidad, subtotal_final])
+				print(producto.nombre + ' x' + str(cantidad) + ' -> Subtotal con promo: $' + str(subtotal_final))
+
+		continuar = input('¿Desea agregar otro producto a la venta? (s/n): ')
+
+	if len(items) == 0:
+		print('No se cargo ningun producto.')
+		return
+
+	total = 0
+	for item in items:
+		total = total + item[3]
+
+	print('\n-----------------------------------------')
+	print('TOTAL FINAL DE LA VENTA (CON PROMOS): $' + str(round(total, 2)))
+	print('-----------------------------------------')
+
+	for item in items:
+		codprod, nombre, cantidad, monto_final = item
+		GuardarRegistroVenta(codprod, nombre, cantidad, monto_final)
