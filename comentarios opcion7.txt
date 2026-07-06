@@ -1,0 +1,4 @@
+Nuevos cambios/agregados: se agrego en funciones.py el apartado de promociones mayorista y minorista (CalcularPromociones()) que nos permite elegir entre 
+las opciones de promocion 2x1, 3x2 y 43%de descuento para productos superiores a 4 unidades, esta opcion es apartado de las demas 
+aunqe de igual manera permite calcular el precio de varios productos mostrando su subtotal final, eso si de momento no se puede aplicar descuentos
+en el apartado main.py se agrego CalcularPromociones en from funciones import y se añadio el elif == 7 para que te permita acceder a dicha opcion
