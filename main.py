@@ -70,8 +70,10 @@ while ejecucion == True:
 
 			elif opcion == 6:
 				print('Pendiente: estadisticas de ventas')
+				
 			elif opcion == 7:
 				CalcularPromociones()
+				
             elif opcion != 0:
 				print('\n')
 				MostrarMenuPrincipal()
