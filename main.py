@@ -1,7 +1,7 @@
 #de funciones.py importamos las funciones a utilizar
 from funciones import (LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario,
 	ValidadorOpcion, CargarProducto, GuardarProducto, CargarDescuento,
-	GuardarDescuento, BuscarProductoPorCodigo, CalcularTotal, PedirInt, mostrarlogin)
+	GuardarDescuento, BuscarProductoPorCodigo, CalcularTotal, PedirInt, mostrarlogin, CalcularPromociones)
 
 LimpiarConsola()
 print('BIENVENIDO A GESTIONSUPER')
@@ -70,8 +70,9 @@ while ejecucion == True:
 
 			elif opcion == 6:
 				print('Pendiente: estadisticas de ventas')
-
-			elif opcion != 0:
+			elif opcion == 7:
+				CalcularPromociones()
+            elif opcion != 0:
 				print('\n')
 				MostrarMenuPrincipal()
 
