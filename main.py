@@ -1,7 +1,8 @@
 #de funciones.py importamos las funciones a utilizar
 from funciones import (LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario,
 	ValidadorOpcion, CargarProducto, GuardarProducto, CargarDescuento,
-	GuardarDescuento, BuscarProductoPorCodigo, CalcularTotal, PedirInt, mostrarlogin, CalcularPromociones)
+	GuardarDescuento, BuscarProductoPorCodigo, CalcularTotal, PedirInt, mostrarlogin,
+	CalcularPromociones, ProductosMasVendidos, EstadisticasDeVentas)
 
 LimpiarConsola()
 print('BIENVENIDO A GESTIONSUPER')
@@ -41,7 +42,8 @@ while ejecucion == True:
 						finalizar = ValidadorOpcion(finalizar)
 				elif estado == 'o':
 					print('no tiene permiso de administrador')
-			#si la opcion que recibe es 2: cargar descuento (NUEVO)
+
+			#si la opcion que recibe es 2: cargar descuento
 			elif opcion == 2:
 				finalizar = 1
 				while finalizar == 1:
@@ -66,18 +68,23 @@ while ejecucion == True:
 					print('Stock: ' + str(producto.stock))
 					print('Codigo: ' + str(producto.codprod))
 
-			#si la opcion que recibe es 4: calcular total de venta (NUEVO)
+			#si la opcion que recibe es 4: calcular total de venta
 			elif opcion == 4:
 				CalcularTotal()
 
 			elif opcion == 5:
-				print('Pendiente: productos mas vendidos')
+				ProductosMasVendidos()
 
 			elif opcion == 6:
-				print('Pendiente: estadisticas de ventas')
-	elif estado == 's':
-		ejecucion == False
+				EstadisticasDeVentas()
 
+			#FIX: la opcion 7 ya estaba en el menu pero nunca se llamaba a la funcion
+			elif opcion == 7:
+				CalcularPromociones()
+
+	elif estado == 's':
+		#FIX: era "ejecucion == False" (comparacion, no hacia nada). Debe ser asignacion.
+		ejecucion = False
 
 LimpiarConsola()
 print('Gracias por elegir att:GESTIONSUPER!')

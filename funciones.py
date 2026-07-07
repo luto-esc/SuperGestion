@@ -1,44 +1,29 @@
-#importamos la libreria 'os' para limpiar la pantalla de la consola
+#importamos la libreria 'os' para limpiar la pantalla de la consola y verificar archivos
+#importamos 'datetime' para obtener la fecha del sistema al registrar una venta
 import os
+import datetime
 from registros import Producto, Descuento
 
 def mostrarlogin(estado):
-
-	lista_usuarios = ['admin','operador','salir']
-	lista_contrasenas = ['admin123','operador123']
-
 	usuario = str(input('Ingrese el usuario: '))
 	contrasena = str(input('Ingrese la contraseña: '))
 
-	if usuario in lista_usuarios:
-		if usuario == 'admin':
-			if contrasena in contrasena:
-				if contrasena == 'admin123':
-					estado = 'a'
-					return estado
-				else:
-					print('contraseña incorrecta')
-					return estado
-			else:
-				print('contraseña incorrecta')
-				return estado
-		elif usuario == 'operador':
-			if contrasena in contrasena:
-				if contrasena == 'operador123':
-					estado = 'o'
-					return estado
-				else:
-					print('contraseña incorrecta')
-					return estado
-			else:
-				print('contraseña incorrecta')
-				return estado
-		elif usuario == 'salir':
-			estado = 's'
-			return estado
+	if usuario == 'admin':
+		if contrasena == 'admin123':
+			estado = 'a'
+		else:
+			print('contraseña incorrecta')
+	elif usuario == 'operador':
+		if contrasena == 'operador123':
+			estado = 'o'
+		else:
+			print('contraseña incorrecta')
+	elif usuario == 'salir':
+		estado = 's'
 	else:
-		print('contraseña incorrecta')
-		return estado
+		print('usuario incorrecto')
+
+	return estado
 
 def StraInt(caracter):
 	if caracter == '1':
@@ -53,6 +38,8 @@ def StraInt(caracter):
 		caracter = 5
 	elif caracter == '6':
 		caracter = 6
+	elif caracter == '7':
+		caracter = 7
 	elif caracter == '0':
 		caracter = 0
 	return caracter
@@ -72,7 +59,7 @@ def MostrarMenuPrincipal():
 		'4) Calcular total de venta',
 		'5) Productos mas vendidos',
 		'6) Estadisticas de ventas',
-		'7) Promocion maorista y minorista',
+		'7) Promocion mayorista y minorista',
 		'0) Salir')
 	for i in menuprincial:
 		print(i)
@@ -81,47 +68,87 @@ def PedirleOpcionUsuario(opcion):
 	opcion = input('Ingrese una opcion: ')
 	return opcion
 
+
+#--- FIX: busqueda secuencial sobre la lista de opciones validas ---
+#(reemplaza el uso de 'in' sobre tuplas, que no es un operador de la catedra)
+def EsOpcionValida(opcion):
+	opciones_validas = ['1', '2', '3', '4', '5', '6', '7', '0']
+	i = 0
+	total = len(opciones_validas)
+	encontrado = False
+
+	# ARR(opciones_validas) / MIENTRAS no se encuentre y no se llegue al FDS
+	while i < total and encontrado == False:
+		if opcion == opciones_validas[i]:
+			encontrado = True
+		i = i + 1
+
+	return encontrado
+
 def ValidadorOpcion(opcion):
-	opcionesInt = (1,2,3,4,5,6,7,0)
-	opcionesStr = ('1','2','3','4','5','6','7','0')
+	valido = EsOpcionValida(opcion)
 
-	if opcion in opcionesStr:
-		opcion = StraInt(opcion)
-		if opcion in opcionesInt:
-			bandera = True
-	else:
-		bandera = False
-
-	while bandera == False:
-		opcion = input('Ingresa una opcion valida: ')
-		if opcion in opcionesStr:
-			opcion = StraInt(opcion)
-			if opcion in opcionesInt:
-				bandera = True
-
-	if bandera == True:
-		return opcion
-
-
-#--- FIX: validacion de datos numericos para que no se rompa el programa ---
-def PedirFloat(mensaje):
-	valido = False
 	while valido == False:
-		try:
-			valor = float(input(mensaje))
-			valido = True
-		except ValueError:
-			print('Error: debe ingresar un valor numerico. Intente nuevamente.')
-	return valor
+		opcion = input('Ingresa una opcion valida: ')
+		valido = EsOpcionValida(opcion)
+
+	opcion = StraInt(opcion)
+	return opcion
+
+
+#--- FIX: validacion de datos numericos SIN try/except (no es estructura de catedra) ---
+#se usa un esquema REPETIR...HASTA QUE sea valido
+
+def EsEnteroValido(texto):
+	texto = texto.strip()
+
+	if texto == '':
+		return False
+
+	if texto[0] == '-':
+		texto = texto[1:]
+
+	if texto == '':
+		return False
+
+	return texto.isdigit()
 
 def PedirInt(mensaje):
-	valido = False
-	while valido == False:
-		try:
-			valor = int(input(mensaje))
-			valido = True
-		except ValueError:
-			print('Error: debe ingresar un numero entero. Intente nuevamente.')
+	valor_texto = input(mensaje)
+
+	while EsEnteroValido(valor_texto) == False:
+		print('Error: debe ingresar un numero entero. Intente nuevamente.')
+		valor_texto = input(mensaje)
+
+	valor = int(valor_texto)
+	return valor
+
+def EsRealValido(texto):
+	texto = texto.strip()
+
+	if texto == '':
+		return False
+
+	if texto[0] == '-':
+		texto = texto[1:]
+
+	partes = texto.split('.')
+
+	if len(partes) == 1:
+		return partes[0] != '' and partes[0].isdigit()
+	elif len(partes) == 2:
+		return partes[0].isdigit() and partes[1].isdigit()
+	else:
+		return False
+
+def PedirFloat(mensaje):
+	valor_texto = input(mensaje)
+
+	while EsRealValido(valor_texto) == False:
+		print('Error: debe ingresar un valor numerico. Intente nuevamente.')
+		valor_texto = input(mensaje)
+
+	valor = float(valor_texto)
 	return valor
 
 
@@ -138,31 +165,59 @@ def CargarProducto():
 	producto = Producto(nombre, precio, stock, codprod)
 	return producto
 
-#FIX: convertir todo a str antes de escribir (antes tiraba TypeError)
+#Esquema: cada PRODUCTO se graba como una SUBSECUENCIA IMPURA
+#delimitada por la marca de fin '///' (no se conoce de antemano su fin,
+#se reconoce por la marca, tal como vimos en Nocion de Secuencia)
 def GuardarProducto(producto, archivo='archivo.txt'):
-	with open(archivo, 'a') as f:
-		f.write('///\n')
-		f.write(producto.nombre + '\n')
-		f.write(str(producto.precio) + '\n')
-		f.write(str(producto.stock) + '\n')
-		f.write(str(producto.codprod) + '\n')
-		f.write('///\n')
+	# Abrir S/(Arch): abrimos el archivo para grabar (modo 'a' = agregar al final)
+	f = open(archivo, 'a')
+	f.write('///\n')
+	f.write(producto.nombre + '\n')
+	f.write(str(producto.precio) + '\n')
+	f.write(str(producto.stock) + '\n')
+	f.write(str(producto.codprod) + '\n')
+	f.write('///\n')
+	# CERRAR(Arch): fundamental, si no se hace se puede perder lo grabado en el buffer
+	f.close()
 
+#FIX: en vez de leer todo el archivo y hacer split('///') + comprension de listas,
+#tratamos el archivo como una SECUENCIA de lineas y la recorremos con ARR/AVZ,
+#reconociendo cada PRODUCTO como una subsecuencia delimitada por la marca '///'
 def BuscarProductoPorCodigo(codigo, archivo='archivo.txt'):
-	try:
-		with open(archivo, 'r') as f:
-			contenido = f.read()
-	except FileNotFoundError:
+	if os.path.exists(archivo) == False:
 		return None
 
-	bloques = contenido.split('///')
-	for bloque in bloques:
-		lineas = [linea for linea in bloque.split('\n') if linea.strip() != '']
-		if len(lineas) == 4:
-			nombre, precio, stock, codprod = lineas
+	f = open(archivo, 'r')
+	lineas = f.readlines()
+	f.close()
+
+	total = len(lineas)
+	i = 0
+	productoEncontrado = None
+
+	# ARR(lineas): arrancamos el recorrido de la secuencia
+	while i < total and productoEncontrado is None:
+		marca = lineas[i].strip()
+
+		if marca == '///':
+			# inicio de subsecuencia: AVZ por cada campo del producto
+			i = i + 1
+			nombre = lineas[i].strip()
+			i = i + 1
+			precio = lineas[i].strip()
+			i = i + 1
+			stock = lineas[i].strip()
+			i = i + 1
+			codprod = lineas[i].strip()
+			i = i + 1
+			i = i + 1   # saltamos la marca de FDS de cierre '///'
+
 			if int(codprod) == codigo:
-				return Producto(nombre, float(precio), int(stock), int(codprod))
-	return None
+				productoEncontrado = Producto(nombre, float(precio), int(stock), int(codprod))
+		else:
+			i = i + 1
+
+	return productoEncontrado
 
 
 #--- descuentos ---
@@ -172,28 +227,47 @@ def CargarDescuento():
 	descuento = Descuento(coddesc, valor)
 	return descuento
 
+#Mismo esquema que GuardarProducto: subsecuencia impura delimitada por '///'
 def GuardarDescuento(descuento, archivo='descuentos.txt'):
-	with open(archivo, 'a') as f:
-		f.write('///\n')
-		f.write(str(descuento.coddesc) + '\n')
-		f.write(str(descuento.valor) + '\n')
-		f.write('///\n')
+	# Abrir S/(Arch)
+	f = open(archivo, 'a')
+	f.write('///\n')
+	f.write(str(descuento.coddesc) + '\n')
+	f.write(str(descuento.valor) + '\n')
+	f.write('///\n')
+	# CERRAR(Arch)
+	f.close()
 
+#Mismo esquema de recorrido ARR/AVZ que BuscarProductoPorCodigo
 def BuscarDescuentoPorCodigo(codigo, archivo='descuentos.txt'):
-	try:
-		with open(archivo, 'r') as f:
-			contenido = f.read()
-	except FileNotFoundError:
+	if os.path.exists(archivo) == False:
 		return None
 
-	bloques = contenido.split('///')
-	for bloque in bloques:
-		lineas = [linea for linea in bloque.split('\n') if linea.strip() != '']
-		if len(lineas) == 2:
-			coddesc, valor = lineas
+	f = open(archivo, 'r')
+	lineas = f.readlines()
+	f.close()
+
+	total = len(lineas)
+	i = 0
+	descuentoEncontrado = None
+
+	while i < total and descuentoEncontrado is None:
+		marca = lineas[i].strip()
+
+		if marca == '///':
+			i = i + 1
+			coddesc = lineas[i].strip()
+			i = i + 1
+			valor = lineas[i].strip()
+			i = i + 1
+			i = i + 1   # saltamos la marca de FDS de cierre '///'
+
 			if int(coddesc) == codigo:
-				return Descuento(int(coddesc), float(valor))
-	return None
+				descuentoEncontrado = Descuento(int(coddesc), float(valor))
+		else:
+			i = i + 1
+
+	return descuentoEncontrado
 
 
 #--- calculo de total de venta (varios productos) ---
@@ -244,22 +318,166 @@ def CalcularTotal():
 
 	#registramos cada producto vendido, con el % de descuento ya aplicado
 	for item in items:
-		codprod, nombre, cantidad, subtotal = item
+		codprod = item[0]
+		nombre = item[1]
+		cantidad = item[2]
+		subtotal = item[3]
 		monto_final = subtotal * (1 - descuento_frac)
 		GuardarRegistroVenta(codprod, nombre, cantidad, monto_final)
 
 
 #--- registro de ventas (para futuras estadisticas) ---
+#Mismo esquema de subsecuencia impura, delimitada por '///'.
+#Ahora la venta tiene un campo mas: la fecha en que se registro.
 def GuardarRegistroVenta(codprod, nombre, cantidad, monto, archivo='ventas.txt'):
-	with open(archivo, 'a') as f:
-		f.write('///\n')
-		f.write(str(codprod) + '\n')
-		f.write(nombre + '\n')
-		f.write(str(cantidad) + '\n')
-		f.write(str(monto) + '\n')
-		f.write('///\n')
+	hoy = datetime.date.today()
 
-# promociones mayorista y minorista 
+	# armamos la fecha en formato dd/mm/aaaa, con cero a la izquierda si hace falta
+	dia = str(hoy.day)
+	if hoy.day < 10:
+		dia = '0' + dia
+
+	mes = str(hoy.month)
+	if hoy.month < 10:
+		mes = '0' + mes
+
+	fecha_texto = dia + '/' + mes + '/' + str(hoy.year)
+
+	# Abrir S/(Arch)
+	f = open(archivo, 'a')
+	f.write('///\n')
+	f.write(str(codprod) + '\n')
+	f.write(nombre + '\n')
+	f.write(str(cantidad) + '\n')
+	f.write(str(monto) + '\n')
+	f.write(fecha_texto + '\n')
+	f.write('///\n')
+	# CERRAR(Arch)
+	f.close()
+
+#Recorrido de TODA la secuencia (a diferencia de Buscar..PorCodigo, que corta
+#al encontrar el primero). Cada venta es una subsecuencia delimitada por '///'.
+#Devuelve una secuencia (lista) de ventas: [codprod, nombre, cantidad, monto, fecha]
+def LeerVentas(archivo='ventas.txt'):
+	if os.path.exists(archivo) == False:
+		return []
+
+	f = open(archivo, 'r')
+	lineas = f.readlines()
+	f.close()
+
+	total = len(lineas)
+	i = 0
+	ventas = []
+
+	# ARR(lineas): recorremos toda la secuencia, no nos detenemos al primer match
+	while i < total:
+		marca = lineas[i].strip()
+
+		if marca == '///':
+			i = i + 1
+			codprod = lineas[i].strip()
+			i = i + 1
+			nombre = lineas[i].strip()
+			i = i + 1
+			cantidad = lineas[i].strip()
+			i = i + 1
+			monto = lineas[i].strip()
+			i = i + 1
+			fecha = lineas[i].strip()
+			i = i + 1
+			i = i + 1   # saltamos la marca de FDS de cierre '///'
+
+			ventas.append([int(codprod), nombre, int(cantidad), float(monto), fecha])
+		else:
+			i = i + 1
+
+	return ventas
+
+
+#--- opcion 5: productos mas vendidos ---
+def ProductosMasVendidos():
+	ventas = LeerVentas()
+
+	if len(ventas) == 0:
+		print('Todavia no se registraron ventas.')
+		return
+
+	acumulado = []   # cada item: [codprod, nombre, cantidad_acumulada]
+
+	# recorremos la secuencia de ventas y acumulamos por producto
+	for venta in ventas:
+		codprod_venta = venta[0]
+		nombre_venta = venta[1]
+		cantidad_venta = venta[2]
+
+		# busqueda secuencial dentro de 'acumulado' (Cap. 9 - busqueda lineal)
+		i = 0
+		encontrado = False
+		while i < len(acumulado) and encontrado == False:
+			if acumulado[i][0] == codprod_venta:
+				acumulado[i][2] = acumulado[i][2] + cantidad_venta
+				encontrado = True
+			i = i + 1
+
+		if encontrado == False:
+			acumulado.append([codprod_venta, nombre_venta, cantidad_venta])
+
+	# ordenamos de mayor a menor cantidad vendida con burbuja (Cap. 9 - O(n^2))
+	n = len(acumulado)
+	i = 0
+	while i < n - 1:
+		j = 0
+		while j < n - i - 1:
+			if acumulado[j][2] < acumulado[j + 1][2]:
+				aux = acumulado[j]
+				acumulado[j] = acumulado[j + 1]
+				acumulado[j + 1] = aux
+			j = j + 1
+		i = i + 1
+
+	print('\n--- PRODUCTOS MAS VENDIDOS ---')
+	for item in acumulado:
+		print(item[1] + ' (codigo ' + str(item[0]) + '): ' + str(item[2]) + ' unidades vendidas')
+
+	print('\nEl producto mas vendido es: ' + acumulado[0][1] + ' con ' + str(acumulado[0][2]) + ' unidades.')
+
+
+#--- opcion 6: estadisticas de ventas ---
+def EstadisticasDeVentas():
+	ventas = LeerVentas()
+
+	if len(ventas) == 0:
+		print('Todavia no se registraron ventas.')
+		return
+
+	total_facturado = 0
+	total_unidades = 0
+	cantidad_ventas = len(ventas)
+
+	# recorrido secuencial acumulando totales
+	for venta in ventas:
+		total_unidades = total_unidades + venta[2]
+		total_facturado = total_facturado + venta[3]
+
+	promedio_por_venta = total_facturado / cantidad_ventas
+
+	#como GuardarRegistroVenta siempre agrega (append) al final del archivo,
+	#el primer elemento de la secuencia es la venta mas antigua y el ultimo
+	#es la mas reciente. No hace falta ordenar para saber esto.
+	primera_fecha = ventas[0][4]
+	ultima_fecha = ventas[len(ventas) - 1][4]
+
+	print('\n--- ESTADISTICAS DE VENTAS ---')
+	print('Cantidad de ventas registradas: ' + str(cantidad_ventas))
+	print('Total de unidades vendidas: ' + str(total_unidades))
+	print('Total facturado: $' + str(round(total_facturado, 2)))
+	print('Promedio facturado por venta: $' + str(round(promedio_por_venta, 2)))
+	print('Primera venta registrada: ' + primera_fecha)
+	print('Ultima venta registrada: ' + ultima_fecha)
+
+
+# promociones mayorista y minorista
 def CalcularPromociones():
 	items = []   # [cada item: codprod, nombre, cantidad, subtotal, descuento aplicado]
 	continuar = 's'
@@ -279,9 +497,9 @@ def CalcularPromociones():
 				print('1) Minorista (2x1 o 3x2)')
 				print('2) Mayorista (43% desc. llevando 4 o mas unidades)')
 				print('0) Ninguna promocion')
-				
+
 				tipo_promo = input('Ingrese una opcion: ')
-				
+
 				subtotal_original = producto.precio * cantidad
 				descuento_promo = 0
 
@@ -299,7 +517,7 @@ def CalcularPromociones():
 						unidades_gratis = cantidad // 3
 						descuento_promo = unidades_gratis * producto.precio
 						print('Promo 3x2 aplicada.')
-				
+
 				elif tipo_promo == '2':
 					if cantidad >= 4:
 						# 43% de descuento por unidad
@@ -327,5 +545,8 @@ def CalcularPromociones():
 	print('-----------------------------------------')
 
 	for item in items:
-		codprod, nombre, cantidad, monto_final = item
+		codprod = item[0]
+		nombre = item[1]
+		cantidad = item[2]
+		monto_final = item[3]
 		GuardarRegistroVenta(codprod, nombre, cantidad, monto_final)
