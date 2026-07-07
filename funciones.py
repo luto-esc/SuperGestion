@@ -3,29 +3,42 @@ import os
 from registros import Producto, Descuento
 
 def mostrarlogin(estado):
-	
-	with open('usuarios.txt', 'r') as f:
-		contenido = f.read().splitlines()
 
-		usuario = str(input('Ingrese el usuario: '))
-		contraseña = str(input('Ingrese la contraseña: '))
+	lista_usuarios = ['admin','operador','salir']
+	lista_contrasenas = ['admin123','operador123']
 
-		for us in contenido:
-			if us == 'admin':
-				for con in contenido:
-					if con == 'admin123':
-						return 'a'
-					else:
-						print('contraseña incorrecta')
-			elif us == 'operador':
-				for con in contenido:
-					if con == 'operador123':
-						return 'o'
-					else:
-						print('contraseña incorrecta')
+	usuario = str(input('Ingrese el usuario: '))
+	contrasena = str(input('Ingrese la contraseña: '))
 
-
-
+	if usuario in lista_usuarios:
+		if usuario == 'admin':
+			if contrasena in contrasena:
+				if contrasena == 'admin123':
+					estado = 'a'
+					return estado
+				else:
+					print('contraseña incorrecta')
+					return estado
+			else:
+				print('contraseña incorrecta')
+				return estado
+		elif usuario == 'operador':
+			if contrasena in contrasena:
+				if contrasena == 'operador123':
+					estado = 'o'
+					return estado
+				else:
+					print('contraseña incorrecta')
+					return estado
+			else:
+				print('contraseña incorrecta')
+				return estado
+		elif usuario == 'salir':
+			estado = 's'
+			return estado
+	else:
+		print('contraseña incorrecta')
+		return estado
 
 def StraInt(caracter):
 	if caracter == '1':
@@ -40,8 +53,6 @@ def StraInt(caracter):
 		caracter = 5
 	elif caracter == '6':
 		caracter = 6
-	elif caracter == '7':
-        caracter = 7
 	elif caracter == '0':
 		caracter = 0
 	return caracter

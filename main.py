@@ -11,10 +11,13 @@ ejecucion = True
 estado = 'n'
 
 while ejecucion == True:
+	print('ingrese _salir_ para terminar el programa')
 
 	estado = mostrarlogin(estado)
 
-	if estado == 'o' or 'a':
+	if estado == 'o' or estado == 'a':
+
+		LimpiarConsola()
 
 		MostrarMenuPrincipal()
 
@@ -24,18 +27,20 @@ while ejecucion == True:
 
 			#si la opcion que recibe es 1: cargar producto
 			if opcion == 1:
-				finalizar = 1
-				while finalizar == 1:
-					producto = CargarProducto()
-					GuardarProducto(producto)
-					print('Producto guardado correctamente.')
+				if estado == 'a':
+					finalizar = 1
+					while finalizar == 1:
+						producto = CargarProducto()
+						GuardarProducto(producto)
+						print('Producto guardado correctamente.')
 
-					print('\n¿Desea cargar otro producto?')
-					print('1) Si')
-					print('0) No')
-					finalizar = PedirleOpcionUsuario(finalizar)
-					finalizar = ValidadorOpcion(finalizar)
-
+						print('\n¿Desea cargar otro producto?')
+						print('1) Si')
+						print('0) No')
+						finalizar = PedirleOpcionUsuario(finalizar)
+						finalizar = ValidadorOpcion(finalizar)
+				elif estado == 'o':
+					print('no tiene permiso de administrador')
 			#si la opcion que recibe es 2: cargar descuento (NUEVO)
 			elif opcion == 2:
 				finalizar = 1
@@ -70,13 +75,9 @@ while ejecucion == True:
 
 			elif opcion == 6:
 				print('Pendiente: estadisticas de ventas')
-				
-			elif opcion == 7:
-				CalcularPromociones()
-				
-            elif opcion != 0:
-				print('\n')
-				MostrarMenuPrincipal()
+	elif estado == 's':
+		ejecucion == False
+
 
 LimpiarConsola()
 print('Gracias por elegir att:GESTIONSUPER!')
