@@ -3,11 +3,11 @@
 Sistema de gestión de supermercado por consola, desarrollado en Python como proyecto para la materia **Algoritmos y Estructuras de Datos**.
 
 Integrantes:
-Chezzi, Fabricio
-Escalante, Lucio Matias
-Agustin, Andres Leguizamon, Sena
-Agustin, Ignacio
-Moreyra, Agustin
+Chezzi, Fabricio.
+Escalante, Lucio Matias.
+Agustin, Andres Leguizamon, Sena.
+Agustin, Ignacio.
+Moreyra, Agustin.
 
 Comision: ISI K1.2
 
@@ -284,3 +284,26 @@ Asimismo, la separación en módulos (`main.py`, `funciones.py`, `registros.py`)
 - Migrar la persistencia a un formato estructurado (JSON o CSV) o a una base de datos, una vez incorporados esos contenidos en la cursada.
 - Incorporar pruebas automatizadas (unitarias) para las funciones de validación y cálculo.
 - Registrar el usuario que realizó cada venta, aprovechando el sistema de login ya existente.
+
+## Uso de Inteligencia Artificial
+
+Durante el desarrollo del proyecto se utilizaron herramientas de Inteligencia Artificial como apoyo en distintas etapas del proceso.
+
+### ChatGPT
+Se utilizó ChatGPT como asistente para:
+- Resolver dudas relacionadas con la programación en Python.
+- Analizar errores y proponer posibles soluciones.
+- Obtener explicaciones sobre conceptos de Algoritmos y Estructuras de Datos.
+- Mejorar la organización y documentación del código.
+- Generar ideas para optimizar algunas funciones y mejorar la claridad del proyecto.
+
+La IA fue utilizada como herramienta de consulta y aprendizaje, verificando siempre las respuestas obtenidas y adaptándolas según las necesidades del proyecto.
+
+### Claude
+Se utilizó Claude como herramienta de apoyo para:
+- Revisar la estructura general del proyecto.
+- Analizar fragmentos de código y sugerir mejoras de organización y legibilidad.
+- Ayudar en la redacción de documentación del proyecto.
+- Proporcionar recomendaciones para mejorar el README y la presentación final del trabajo.
+
+Ambas herramientas fueron utilizadas como complemento al trabajo del equipo, sin reemplazar el análisis, diseño e implementación realizada por los integrantes del proyecto.
