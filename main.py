@@ -57,7 +57,7 @@ while ejecucion == True:
 						print('0) No')
 						finalizar = PedirleOpcionUsuario(finalizar)
 						finalizar = ValidadorOpcion(finalizar)
-				elif estado == 'o'
+				elif estado == 'o':
 					print('No tinee permisos de administrador')
 			elif opcion == 3:
 				codprod = PedirInt('Ingrese el codigo del producto a buscar: ')
