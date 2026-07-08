@@ -315,6 +315,7 @@ def CalcularTotal():
 
 	total_final = total * (1 - descuento_frac)
 	print('TOTAL A PAGAR: $' + str(round(total_final, 2)))
+	GenerarTicket(items, total, round(descuento_frac * 100, 2), total_final)
 
 	#registramos cada producto vendido, con el % de descuento ya aplicado
 	for item in items:
@@ -543,6 +544,7 @@ def CalcularPromociones():
 	print('\n-----------------------------------------')
 	print('TOTAL FINAL DE LA VENTA (CON PROMOS): $' + str(round(total, 2)))
 	print('-----------------------------------------')
+	GenerarTicket(items, total, 0, total)
 
 	for item in items:
 		codprod = item[0]
@@ -550,3 +552,89 @@ def CalcularPromociones():
 		cantidad = item[2]
 		monto_final = item[3]
 		GuardarRegistroVenta(codprod, nombre, cantidad, monto_final)
+
+#--- generacion de tickets ---
+
+#Llevamos un numero correlativo de tiket en un archivo aparte.
+#Es una SECUENCIA de un solo valor: lo leemos, lo usamos, y grabamos el siguiente.
+def ObtenerNumeroTicket(archivo='numeroticket.txt'):
+	if os.path.exists(archivo) == False:
+		numero = 1
+	else:
+		f = open(archivo, 'r')
+		numero = int(f.read().strip())
+		f.close()
+
+	# Abrir S/(Arch): grabamos el proximo numero a usar la siguiente vez
+	f = open(archivo, 'w')
+	f.write(str(numero + 1))
+	f.close()
+
+	return numero
+
+#Arma la fecha y hora actual en formato dd/mm/aaaa hh:mm
+def ObtenerFechaHoraTexto():
+	hoy = datetime.datetime.now()
+
+	dia = str(hoy.day)
+	if hoy.day < 10:
+		dia = '0' + dia
+
+	mes = str(hoy.month)
+	if hoy.month < 10:
+		mes = '0' + mes
+
+	hora = str(hoy.hour)
+	if hoy.hour < 10:
+		hora = '0' + hora
+
+	minuto = str(hoy.minute)
+	if hoy.minute < 10:
+		minuto = '0' + minuto
+
+	return dia + '/' + mes + '/' + str(hoy.year) + ' ' + hora + ':' + minuto
+
+#Genera un archivo .txt con el tiket de la compra.
+#items: lista de [codprod, nombre, cantidad, subtotal]
+#subtotal: suma de todos los items sin descuento
+#descuentoPorc: porcentaje de descuento aplicado (0 si no hubo)
+#totalFinal: total a pagar ya con el descuento aplicado
+def GenerarTicket(items, subtotal, descuentoPorc, totalFinal):
+	numero = ObtenerNumeroTicket()
+	numeroTexto = str(numero).zfill(4)
+	archivo = 'ticket_' + numeroTexto + '.txt'
+	fechaTexto = ObtenerFechaHoraTexto()
+
+	# Abrir S/(Arch)
+	f = open(archivo, 'w')
+	f.write('==========================================\n')
+	f.write('             SUPERGESTION\n')
+	f.write('           Ticket de compra\n')
+	f.write('==========================================\n')
+	f.write('Ticket Nro: ' + numeroTexto + '\n')
+	f.write('Fecha: ' + fechaTexto + '\n')
+	f.write('------------------------------------------\n')
+	f.write('Producto             Cant.     Importe\n')
+	f.write('------------------------------------------\n')
+
+	for item in items:
+		nombre = item[1]
+		cantidad = item[2]
+		importe = item[3]
+		linea = nombre.ljust(20) + 'x' + str(cantidad).rjust(3) + '   $' + str(round(importe, 2)).rjust(8)
+		f.write(linea + '\n')
+
+	f.write('------------------------------------------\n')
+	f.write('Subtotal:'.ljust(30) + '$' + str(round(subtotal, 2)).rjust(8) + '\n')
+
+	if descuentoPorc > 0:
+		f.write('Descuento aplicado:'.ljust(30) + str(descuentoPorc) + '%\n')
+
+	f.write('TOTAL:'.ljust(30) + '$' + str(round(totalFinal, 2)).rjust(8) + '\n')
+	f.write('==========================================\n')
+	f.write('         Gracias por su compra!\n')
+	f.write('==========================================\n')
+	# CERRAR(Arch)
+	f.close()
+
+	print('\nTiket generado correctamente: ' + archivo)
