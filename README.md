@@ -2,6 +2,15 @@
 
 Sistema de gestión de supermercado por consola, desarrollado en Python como proyecto para la materia **Algoritmos y Estructuras de Datos**.
 
+Integrantes:
+Chezzi, Fabricio
+Escalante, Lucio Matias
+Agustin, Andres Leguizamon, Sena
+Agustin, Ignacio
+Moreyra, Agustin
+
+Comision: ISI K1.2
+
 ## Descripción
 
 SuperGestion es una aplicación de consola que resuelve un problema típico de gestión comercial a pequeña escala: permitir a un supermercado **cargar productos y descuentos, buscarlos, calcular el total de una venta (con o sin promociones), registrar esas ventas y obtener reportes** (productos más vendidos y estadísticas generales), todo esto **sin depender de una base de datos externa**, utilizando archivos de texto plano como mecanismo de persistencia.
