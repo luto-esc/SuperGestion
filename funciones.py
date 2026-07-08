@@ -4,26 +4,52 @@ import os
 import datetime
 from registros import Producto, Descuento
 
-def mostrarlogin(estado):
+'''
+La funcion login recibe como variable un estado y retorna un caracter.
+Segun el main.py, para acceder al ciclo principal debe ingresar bien las credenciales
+para que la funcion retorne 'a' como admin, y 'o' como operador
+ademas si la variable usuario recibe como entrada = 'salir'
+la fucion retorna 's'
+'''
+def Login(estado):
+
+	#Credenciales validas de los usuarios
+	usAdmin = 'admin'
+	coAdmin = 'admin123'
+
+	#Contraseñas validas de los usuarios
+	usOpera = 'operador'
+	coOpera = 'operador123'
+
 	usuario = str(input('Ingrese el usuario: '))
+
+	#Si el usuario ingresa la fucion retorna 's'
+	if usuario == 'salir':
+		return 's'
+
 	contrasena = str(input('Ingrese la contraseña: '))
 
-	if usuario == 'admin':
-		if contrasena == 'admin123':
-			estado = 'a'
+	#Si usuario = sAdmin
+	if usuario == usAdmin:
+		#Si contresena = coAdmin
+		if contrasena == coAdmin:
+			#la fucion retorna 'a'
+			return 'a'
+		#Si_no Esc('contraseña incorrecta')
 		else:
 			print('contraseña incorrecta')
-	elif usuario == 'operador':
-		if contrasena == 'operador123':
-			estado = 'o'
+			#Retorna el mismo valor con el que se ingreso
+			#Esto seria equivalente a login := estado
+			return estado
+	#Si usuario = usOpera
+	if usuario == usOpera:
+		#Si contrasena = coOpera
+		if contrasena == coOpera:
+			#La funcion retorna 'o'
+			return 'o'
 		else:
-			print('contraseña incorrecta')
-	elif usuario == 'salir':
-		estado = 's'
-	else:
-		print('usuario incorrecto')
-
-	return estado
+			print('contraeña incorrecta')
+			return estado
 
 def StraInt(caracter):
 	if caracter == '1':

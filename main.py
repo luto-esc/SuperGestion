@@ -41,22 +41,24 @@ while ejecucion == True:
 						finalizar = PedirleOpcionUsuario(finalizar)
 						finalizar = ValidadorOpcion(finalizar)
 				elif estado == 'o':
-					print('no tiene permiso de administrador')
+					print('No tiene permiso de administrador')
 
-			#si la opcion que recibe es 2: cargar descuento
+			#Si la opcion que recibe es 2: cargar descuento
 			elif opcion == 2:
-				finalizar = 1
-				while finalizar == 1:
-					descuento = CargarDescuento()
-					GuardarDescuento(descuento)
-					print('Descuento guardado correctamente.')
+				if estado == 'a':
+					finalizar = 1
+					while finalizar == 1:
+						descuento = CargarDescuento()
+						GuardarDescuento(descuento)
+						print('Descuento guardado correctamente.')
 
-					print('\n¿Desea cargar otro descuento?')
-					print('1) Si')
-					print('0) No')
-					finalizar = PedirleOpcionUsuario(finalizar)
-					finalizar = ValidadorOpcion(finalizar)
-
+						print('\n¿Desea cargar otro descuento?')
+						print('1) Si')
+						print('0) No')
+						finalizar = PedirleOpcionUsuario(finalizar)
+						finalizar = ValidadorOpcion(finalizar)
+				elif estado == 'o'
+					print('No tinee permisos de administrador')
 			elif opcion == 3:
 				codprod = PedirInt('Ingrese el codigo del producto a buscar: ')
 				producto = BuscarProductoPorCodigo(codprod)
