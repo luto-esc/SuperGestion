@@ -1,7 +1,7 @@
 #de funciones.py importamos las funciones a utilizar
 from funciones import (LimpiarConsola, MostrarMenuPrincipal, PedirleOpcionUsuario,
 	ValidadorOpcion, CargarProducto, GuardarProducto, CargarDescuento,
-	GuardarDescuento, BuscarProductoPorCodigo, CalcularTotal, PedirInt, mostrarlogin,
+	GuardarDescuento, BuscarProductoPorCodigo, CalcularTotal, PedirInt, Login,
 	CalcularPromociones, ProductosMasVendidos, EstadisticasDeVentas)
 
 LimpiarConsola()
@@ -14,7 +14,7 @@ estado = 'n'
 while ejecucion == True:
 	print('ingrese _salir_ para terminar el programa')
 
-	estado = mostrarlogin(estado)
+	estado = Login(estado)
 
 	if estado == 'o' or estado == 'a':
 
